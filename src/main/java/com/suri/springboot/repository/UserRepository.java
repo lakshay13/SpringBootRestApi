@@ -18,5 +18,5 @@ public interface UserRepository extends CrudRepository<Users, Integer> {
       * Method finds the user ordered by salary in ascending order.
       * @return the list of users.
       */
-     List<Users> findAllByOrderBySalaryAsc();
+     List<Users> findAllByOrderBySalaryDesc();
 }

@@ -68,7 +68,7 @@ public class RestApiController {
     @RequestMapping(value = "/users/maxsalary", method = RequestMethod.GET)
     public ResponseEntity<List<Users>> getUserByHighestSalary() {
         logger.info("Trying to find the user sorted by highest salary");
-        List<Users> usersFound = userRepository.findAllByOrderBySalaryAsc();
+        List<Users> usersFound = userRepository.findAllByOrderBySalaryDesc();
 
         if (usersFound.size() == 0) {
             logger.error("User list is empty");
