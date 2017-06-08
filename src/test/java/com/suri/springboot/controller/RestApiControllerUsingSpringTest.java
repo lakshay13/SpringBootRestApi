@@ -54,7 +54,7 @@ public class RestApiControllerUsingSpringTest {
 
     @Test
     public void testGetUserByHighestSalary() {
-        given(userRepository.findAllByOrderBySalaryAsc()).willReturn(getUserInserted());
+        given(userRepository.findAllByOrderBySalaryDesc()).willReturn(getUserInserted());
         ResponseEntity<List<Users>> usersFound = restApiController.getUserByHighestSalary();
 
         assertEquals(usersFound.getStatusCode(), HttpStatus.OK);
