@@ -14,3 +14,10 @@ The Spring Boot Rest Api Project implements REST API. The Rest API consists of t
 // Uses H2 database for data persistence and retrieval
 
 ```
+
+The testing methodology used involves the following:
+```
+1) Unit Testing by creating the simple mocks.
+2) Integration Testing using MockMvc
+3) Integration Testing using the RestAssured
+```
