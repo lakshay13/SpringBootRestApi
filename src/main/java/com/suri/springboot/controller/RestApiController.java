@@ -76,4 +76,23 @@ public class RestApiController {
         }
         return new ResponseEntity<List<Users>>(usersFound, HttpStatus.OK);
     }
+
+    /**
+     * Method that deletes the specific user by specifying the user id
+     * @param id the user to be deleted
+     * @return either an error if the user to be deleted does not exist or a success message.
+     */
+    @RequestMapping(value="/users/remove/{id}", method = RequestMethod.DELETE)
+    public ResponseEntity<String> removeUserById(@PathVariable("id") Integer id) {
+        logger.info("Trying to find the user that needs to be deleted");
+        Users userToBeDeleted = userRepository.findOne(id);
+        if (userToBeDeleted == null) {
+            logger.error("User to be deleted with id { } does not exist", id);
+            return new ResponseEntity(new CustomisedErrorType("User with id " + id + " not found"), HttpStatus.NOT_FOUND);
+        } else {
+            userRepository.delete(id);
+        }
+
+        return new ResponseEntity<String>("User successfully deleted", HttpStatus.OK);
+    }
 }
