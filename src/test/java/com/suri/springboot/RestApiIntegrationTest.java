@@ -1,7 +1,8 @@
-package com.suri.springboot.controller;
+package com.suri.springboot;
 
 import java.util.List;
 
+import com.suri.springboot.controller.RestApiController;
 import com.suri.springboot.model.Users;
 import com.suri.springboot.repository.UserRepository;
 import org.junit.Before;
@@ -45,6 +46,8 @@ public class RestApiIntegrationTest {
     public void setUp() {
 
         MockitoAnnotations.initMocks(this);
+        // standaloneSetup gives the user the ability to mock the dependencies as needed. It does not load the spring configuration.
+        // webAppContextSetup loads the spring configuration and injects the WebApplicationContext into the test.
         mockMvc = MockMvcBuilders.standaloneSetup(restApiController).build();
     }
 

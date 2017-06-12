@@ -1,7 +1,8 @@
-package com.suri.springboot.controller;
+package com.suri.springboot;
 
 import java.util.List;
 
+import com.suri.springboot.controller.RestApiController;
 import com.suri.springboot.model.Users;
 import com.suri.springboot.repository.UserRepository;
 import org.junit.Test;
