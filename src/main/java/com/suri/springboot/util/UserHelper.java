@@ -25,4 +25,20 @@ public class UserHelper {
 
         return list;
     }
+
+
+    public static List<Users> getUserListBySalaryDescending() {
+        List<Users> list = new ArrayList<Users>();
+        Users u1 = new Users(126, "Lakshay Suri", 60000);
+        Users u2= new Users( 125, "Jack Johnson",27700);
+        Users u3 = new Users( 124, "Borris Becker", 27500);
+        Users u4 = new Users(123, "Lakshay Suri", 27000);
+
+        list.add(u1);
+        list.add(u2);
+        list.add(u3);
+        list.add(u4);
+
+        return list;
+    }
 }
