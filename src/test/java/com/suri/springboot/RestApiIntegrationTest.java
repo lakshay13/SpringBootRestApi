@@ -9,18 +9,22 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
+import org.mockito.Matchers;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import static com.suri.springboot.util.UserHelper.getUserInserted;
 import static com.suri.springboot.util.UserHelper.getUserListBySalaryDescending;
 import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Matchers.anyInt;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -87,5 +91,19 @@ public class RestApiIntegrationTest {
                                              .andExpect(jsonPath("$.[0].empName", is(user.get(3).getEmpName())))
                                              .andExpect(jsonPath("$.[0].salary", is(user.get(3).getSalary())))
                                              .andExpect(status().isOk());
+    }
+
+    /**
+     * Test delete a specific user with its id.
+     * @throws Exception throws exception if it fails.
+     */
+    @Test
+    public void testRemoveTheUserById() throws Exception {
+        given(userRepository.findOne(Matchers.anyInt())).willReturn(getUserInserted().get(3));
+        MvcResult result = mockMvc.perform((delete("/users/remove/{id}", 126)))
+               .andExpect(status().isOk())
+               .andReturn();
+
+        assertEquals(result.getResponse().getContentAsString(), "User successfully deleted");
     }
 }

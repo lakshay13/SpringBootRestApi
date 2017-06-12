@@ -7,6 +7,8 @@ import com.suri.springboot.model.Users;
 import com.suri.springboot.repository.UserRepository;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
+import io.restassured.response.Response;
+import org.apache.http.HttpStatus;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,6 +22,7 @@ import static com.suri.springboot.util.UserHelper.getUserInserted;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.anyInt;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
@@ -49,10 +52,9 @@ public class RestAssuredTest {
 
     /**
      * Test get the list of users. Do note that the port needs to be defined as its a random port being used.
-     * @throws Exception throws exception if it fails.
      */
     @Test
-    public void testGetUsers() throws Exception {
+    public void testGetUsers() {
 
         List<Users> user = getUserInserted();
 
@@ -68,10 +70,9 @@ public class RestAssuredTest {
 
     /**
      * Test get the user by specific Id.
-     * @throws Exception throws exception if it fails.
      */
     @Test
-    public void testGetUserById() throws Exception {
+    public void testGetUserById() {
 
         org.mockito.BDDMockito.given(userRepository.findOne(anyInt())).willReturn(getUserInserted().get(0));
         List<Users> user = getUserInserted();
@@ -80,11 +81,29 @@ public class RestAssuredTest {
                contentType(ContentType.JSON).
                port(port).
         when().
-               get("/users/{id}", "123").
+               get("/users/{id}", getUserInserted().get(0).getId()).
         then().
                body("id", is(user.get(0).getId())).
                body("empName", is(user.get(0).getEmpName())).
                body("salary", is(user.get(0).getSalary()));
+    }
 
+    /**
+     * Test remove the user by specific Id.
+     */
+    @Test
+    public void testRemoveUserById() {
+
+        org.mockito.BDDMockito.given(userRepository.findOne(anyInt())).willReturn(getUserInserted().get(3));
+
+        Response response =
+                given().
+                       contentType(ContentType.JSON).
+                       port(port).
+                when().
+                       delete("/users/remove/{id}", getUserInserted().get(3).getId());
+
+        assertEquals(response.getStatusCode(), HttpStatus.SC_OK);
+        assertEquals(response.getBody().asString(), "User successfully deleted");
     }
 }

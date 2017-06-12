@@ -7,6 +7,7 @@ import com.suri.springboot.model.Users;
 import com.suri.springboot.repository.UserRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Matchers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -58,5 +59,15 @@ public class RestApiUnitTest {
 
         assertEquals(usersFound.getStatusCode(), HttpStatus.OK);
         assertEquals(usersFound.getBody(), getUserListBySalaryDescending());
+    }
+
+    @Test
+    public void testRemoveUserById() {
+
+        given(userRepository.findOne(Matchers.anyInt())).willReturn(getUserInserted().get(3));
+        ResponseEntity<String> userDeletion  = restApiController.removeUserById(126);
+
+        assertEquals(userDeletion.getStatusCode(), HttpStatus.OK);
+        assertEquals(userDeletion.getBody(), "User successfully deleted");
     }
 }
