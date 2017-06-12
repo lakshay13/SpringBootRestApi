@@ -7,6 +7,7 @@ The Spring Boot Rest Api Project implements REST API. The Rest API consists of t
     /users: End point will provide the list of all users.
     /users/{id}: End point will return the data of the user searched.
     /users/maxsalary: Return the user list sorted by max salary.
+    /remove/{id}: Deletes the user with specified Id if it exists.
 
 // Basic spring boot authentication
      Default user name is user while the password is ***
