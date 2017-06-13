@@ -26,6 +26,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Matchers.anyInt;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -100,10 +101,57 @@ public class RestApiIntegrationTest {
     @Test
     public void testRemoveTheUserById() throws Exception {
         given(userRepository.findOne(Matchers.anyInt())).willReturn(getUserInserted().get(3));
-        MvcResult result = mockMvc.perform((delete("/users/remove/{id}", 126)))
+        MvcResult result = mockMvc.perform(
+                delete("/users/remove/{id}", 126))
                .andExpect(status().isOk())
                .andReturn();
 
         assertEquals(result.getResponse().getContentAsString(), "User successfully deleted");
+    }
+
+    /**
+     * Test trying to add a user with all the parameters needed.
+     * @throws Exception if user can not be added.
+     */
+    @Test
+    public void testAddAdditionOfUser() throws Exception {
+
+        String empName = "Andy Murray";
+        Users users = new Users(128, "Andy Murray", 50000);
+
+        given(userRepository.save(Matchers.any(Users.class))).willReturn(users);
+
+        MvcResult mvcResult = mockMvc.perform(
+                post("/users/add")
+               .param("empName", empName)
+               .param("salary", "50000")
+               .param("Id", "127"))
+               .andExpect(status().isOk())
+               .andReturn();
+
+        assertEquals(mvcResult.getResponse().getContentAsString(), "User " + users + " successfully created");
+    }
+
+    /**
+     * Test trying to add a user with empName as null.
+     * @throws Exception if user can not be added.
+     */
+    @Test
+    public void testAdditionOfUserWithOneOfParameterAsNull() throws Exception {
+
+        String empName = null;
+        Users users = null;
+
+        given(userRepository.save(Matchers.any(Users.class))).willReturn(users);
+
+        MvcResult mvcResult = mockMvc.perform(
+                post("/users/add")
+                .param("empName", empName)
+                .param("salary", "28500")
+                .param("Id", "128"))
+                .andExpect(status().is(400))
+                .andReturn();
+
+        assertEquals(mvcResult.getResponse().getContentAsString(), "User " + users + " cannot be created");
     }
 }

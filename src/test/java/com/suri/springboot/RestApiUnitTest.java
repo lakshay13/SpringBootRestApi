@@ -70,4 +70,15 @@ public class RestApiUnitTest {
         assertEquals(userDeletion.getStatusCode(), HttpStatus.OK);
         assertEquals(userDeletion.getBody(), "User successfully deleted");
     }
+
+    @Test
+    public void testAdditionOfUser() {
+        Users users = new Users(128, "Andy Murray", 50000);
+        given(userRepository.save(users)).willReturn(users);
+
+        ResponseEntity<String> userAdded = restApiController.createAUser("Andy Murray", 50000, 128);
+        assertEquals(userAdded.getStatusCode(), HttpStatus.OK);
+        assertEquals(userAdded.getBody(), "User " + users + " successfully created");
+
+    }
 }

@@ -58,14 +58,14 @@ public class RestAssuredTest {
 
         List<Users> user = getUserInserted();
 
-          given().
-              contentType(ContentType.JSON).
-              port(port).
-          when().
-              get("/users/").
-          then().
-              body("id", hasItems(user.get(0).getId(), user.get(1).getId(), user.get(2).getId(), user.get(3).getId())).
-              body("empName", hasItems(user.get(0).getEmpName(), user.get(1).getEmpName(), user.get(2).getEmpName(), user.get(3).getEmpName()));
+          given()
+                  .contentType(ContentType.JSON)
+                  .port(port).
+          when()
+                  .get("/users/").
+          then()
+                  .body("id", hasItems(user.get(0).getId(), user.get(1).getId(), user.get(2).getId(), user.get(3).getId()))
+                  .body("empName", hasItems(user.get(0).getEmpName(), user.get(1).getEmpName(), user.get(2).getEmpName(), user.get(3).getEmpName()));
     }
 
     /**
@@ -77,15 +77,15 @@ public class RestAssuredTest {
         org.mockito.BDDMockito.given(userRepository.findOne(anyInt())).willReturn(getUserInserted().get(0));
         List<Users> user = getUserInserted();
 
-        given().
-               contentType(ContentType.JSON).
-               port(port).
-        when().
-               get("/users/{id}", getUserInserted().get(0).getId()).
-        then().
-               body("id", is(user.get(0).getId())).
-               body("empName", is(user.get(0).getEmpName())).
-               body("salary", is(user.get(0).getSalary()));
+        given()
+                .contentType(ContentType.JSON)
+                .port(port).
+        when()
+                .get("/users/{id}", getUserInserted().get(0).getId()).
+        then()
+                .body("id", is(user.get(0).getId()))
+                .body("empName", is(user.get(0).getEmpName()))
+                .body("salary", is(user.get(0).getSalary()));
     }
 
     /**
@@ -97,13 +97,34 @@ public class RestAssuredTest {
         org.mockito.BDDMockito.given(userRepository.findOne(anyInt())).willReturn(getUserInserted().get(3));
 
         Response response =
-                given().
-                       contentType(ContentType.JSON).
-                       port(port).
-                when().
-                       delete("/users/remove/{id}", getUserInserted().get(3).getId());
+                given()
+                        .contentType(ContentType.JSON)
+                        .port(port).
+                when()
+                        .delete("/users/remove/{id}", getUserInserted().get(3).getId());
 
         assertEquals(response.getStatusCode(), HttpStatus.SC_OK);
         assertEquals(response.getBody().asString(), "User successfully deleted");
+    }
+
+    @Test
+    public void testAdditionOfUser() {
+
+        Users users = new Users(128, "Andy Murray", 50000);
+        org.mockito.BDDMockito.given(userRepository.save(users)).willReturn(users);
+
+        Response response =
+                given()
+                        .contentType(ContentType.JSON)
+                        .port(port)
+                        .queryParam("empName", "Andy Murray")
+                        .queryParam("salary", 50000)
+                        .queryParam("Id", 128).
+                when()
+                        .post("/users/add");
+
+
+        assertEquals(response.getStatusCode(), HttpStatus.SC_OK);
+        assertEquals(response.getBody().asString(), "User " + users + " successfully created");
     }
 }
