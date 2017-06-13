@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import static com.suri.springboot.util.UserHelper.getUserInserted;
@@ -95,4 +96,24 @@ public class RestApiController {
 
         return new ResponseEntity<String>("User successfully deleted", HttpStatus.OK);
     }
+
+    @RequestMapping(value = "/users/add", method = RequestMethod.POST)
+    public ResponseEntity<String> createAUser(@RequestParam(value ="empName", required = false) String empName,
+                                              @RequestParam(value = "salary", required = false) Integer salary,
+                                              @RequestParam(value = "Id", required = false) Integer id) {
+
+
+        logger.info("Creating the user {} with the salary {} and id {} given", empName, salary, id);
+
+        Users userSaved;
+        if (empName!= null && salary!= null && id!= null) {
+            Users users = new Users(id, empName, salary);
+            userSaved = userRepository.save(users);
+        } else {
+            logger.error("User {} with the salary {} and id {} cannot be created", empName, salary, id);
+            return new ResponseEntity<String>("User " + empName + " cannot be created", HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<String>("User " + userSaved + " successfully created", HttpStatus.OK);
+    }
+
 }
