@@ -27,10 +27,10 @@ public class RestApiController {
     public static final Logger logger = org.slf4j.LoggerFactory.getLogger(RestApiController.class);
 
     @Autowired
-    UserService userService;
+    private UserService userService;
 
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
     private List<Users> tempUserList;
 
