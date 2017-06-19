@@ -21,5 +21,5 @@ The testing methodology used involves the following:
 ```
 1) Unit Testing by creating the simple mocks.
 2) Integration Testing using MockMvc
-3) Integration Testing using the RestAssured
+3) Functional Testing using the RestAssured
 ```
