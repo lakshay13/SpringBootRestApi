@@ -23,3 +23,12 @@ The testing methodology used involves the following:
 2) Integration Testing using MockMvc
 3) Functional Testing using the RestAssured
 ```
+The project can be run using Docker. The docker file has been constructed using the following format:
+```
+FROM: is used to set the base image for subsequent instructions. It is mandatory to set this in the first line of a Dockerfile. You can use it any number of times though.
+MAINTAINER: refers to the author of the docker file
+VOLUME: volume is created each time a container is started from an image.
+ADD: copies the file from source to add directories/files to the docker image.
+ENV: used to se the environment variables specific to services you wish to containerize
+ENTRYPOINT: allow you to specify the startup command for an image.
+```
